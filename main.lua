@@ -6,33 +6,45 @@ input = ""
 --table --1------2---------3----indexes
 inv = {"coin", "sword", "armour"}
 
-table.insert(inv, "magic shoes")
-
+--functions
+function get_inv()
+	for i,v in pairs(inv) do
+		print(i .. " " .. v)
+	end
+end
+function get_input()
+	print("What do you want to do?")
+	i = io.read()
+	return i
+end
+function push_inv(item)
+	table.insert(inv, item)
+end
+function pop_inv(item)
+	table.remove(inv, item)
+end
+function err_command()
+	print("Write a valid command!")
+end
 
 --until user decides to leave cave, continue the loop
 while input ~= "leave" do
-	print("What do you want to do?")
-	input = io.read()
-
+	input = get_input()
 	if input == "inv" then
-		for i,v in pairs(inv) do
-			print(i,v)
-		end
+		get_inv()
 	elseif input == "inspect" then
 		print("Enter cave...")
 	elseif input == "leave" then
 		print("Leave cave..")
 	else
-		print("Write a valid command!")
+		err_command()
 	end
 end
 
 input = ""
 --till user decides to follow path
 while input ~= "follow path" do
-	print("What do you want to do?")
-	input = io.read()
-
+	input = get_input()
 	if input == "inspect" then
 		print("You are at the base of a hill. There is a path")
 	elseif input == "follow path" then
@@ -44,13 +56,15 @@ while input ~= "follow path" do
 			print("You smack it with your sword and it falls down.")
 		elseif input2 == "run" then
 			print("You cowardly turn your back so it smacks you and steals your coin.")
-			table.remove(inv,1)
+			pop_inv(1)
 		else
 			print("You stand there as it stabs you. You die, game over!")
 			os.exit()
 		end
+	elseif input == "inv" then
+		get_inv()
 	else
-		print("Write a valid command!")
+		err_command()
 	end
 end
 
@@ -58,9 +72,7 @@ input = ""
 have_key = false
 --till user decides to follow path
 while not(input == "open gate" and have_key == true) do
-	print("What do you want to do?")
-	input = io.read()
-
+	input = get_input()
 	if input == "inspect" then
 		if have_key == false then
 			print("There is a gate. It is hidden in the grass.")
@@ -70,6 +82,11 @@ while not(input == "open gate" and have_key == true) do
 	elseif input == "grab key" then
 		have_key = true
 		print("You grabbed the key.")
+	elseif input == "get magic" then
+		push_inv("magic")
+		print("You got magic.")
+	elseif input == "inv" then
+		get_inv()
 	elseif input == "open gate" then
 		if have_key == true then
 			print("You've escaped.")
@@ -77,7 +94,7 @@ while not(input == "open gate" and have_key == true) do
 			print("The gate is locked.")
 		end
 	else
-		print("Write a valid command!")
+		err_command()
 	end
 end
 
